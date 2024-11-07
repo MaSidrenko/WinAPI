@@ -30,7 +30,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="dove_no_war_peace_icon_232975.ico">
+    <Image Include="ico_for_ListBox.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

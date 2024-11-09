@@ -1,4 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<Windows.h>
+#include<cstdio>
 
 CONST CHAR g_sz_MY_WINDOW_CLASS[] = "My Window";	//Имя класса окна
 
@@ -31,18 +33,26 @@ INT WINAPI WinMain(HINSTANCE hIntance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT
 		return 0;
 	}
 	//Создание окна:
+
+	INT screen_Width = GetSystemMetrics(SM_CXSCREEN);
+	INT screen_Height = GetSystemMetrics(SM_CYSCREEN);
+
+	INT Window_Width = screen_Width * 0.75;
+	INT Window_Height = screen_Height * 0.75;
+
+	INT Window_Start_X = screen_Width / 8;
+	INT Window_Start_Y = screen_Height / 8;
+
 	HWND hwnd = CreateWindowEx
 	(
-		NULL,				  //ExStyles
-		g_sz_MY_WINDOW_CLASS, //Class name
-		g_sz_MY_WINDOW_CLASS, //Window title
-		WS_OVERLAPPEDWINDOW,  //Window stule
-		CW_USEDEFAULT,		  //Window position
-		CW_USEDEFAULT,		  //Window position
-		CW_USEDEFAULT,		  //Window size
-		CW_USEDEFAULT,		  //Window size
-		NULL,				  //Paretn Window
-		NULL,				  //Main menu resourceID for MainWindow or ResourceID for ChileWindow
+		NULL,								  //ExStyles
+		g_sz_MY_WINDOW_CLASS,				  //Class name
+		g_sz_MY_WINDOW_CLASS,				  //Window title
+		WS_OVERLAPPEDWINDOW,				  //Window stule
+		Window_Start_X,Window_Start_Y,		  //Window position
+		Window_Width,Window_Height,			  //Window size
+		NULL,								  //Paretn Window
+		NULL,								  //Main menu resourceID for MainWindow or ResourceID for ChileWindow
 		hIntance,
 		NULL
 	);
@@ -65,6 +75,24 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch (uMsg)
 	{
 	case WM_CREATE:
+		break;
+	case WM_MOVE:
+	case WM_SIZE:
+	{
+		RECT rect;
+		GetWindowRect(hwnd, &rect);
+		INT window_width = rect.right - rect.left;
+		INT window_height = rect.bottom - rect.top;
+
+		CONST INT SIZE = 256;
+		CHAR sz_title[SIZE]{};
+		sprintf(sz_title, 
+			"%s - Pos: %ix%i;Size: %ix%i",
+			g_sz_MY_WINDOW_CLASS ,
+			rect.left, rect.top, 
+			window_width, window_height);
+		SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)sz_title);
+	}
 		break;
 	case WM_COMMAND:
 		break;

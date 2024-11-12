@@ -3,7 +3,9 @@
 // Used by Resource.rc
 //
 #define IDC_CURSOR1                     101
-
+#define IDC_STATIC						1000
+#define IDC_EDIT						1001
+#define IDC_BUTTON						1002
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

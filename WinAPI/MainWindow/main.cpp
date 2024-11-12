@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include<Windows.h>
 #include<cstdio>
+#include"resource.h"
 
 CONST CHAR g_sz_MY_WINDOW_CLASS[] = "My Window";	//Имя класса окна
 
@@ -17,14 +18,23 @@ INT WINAPI WinMain(HINSTANCE hIntance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	//Внешиний вид:
-	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	//wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	//wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+
+	wc.hIcon = (HICON)LoadImage(hIntance, "Peace_ico.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	wc.hIconSm = (HICON)LoadImage(hIntance, "weather_ico.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	
+
+	wc.hCursor = (HCURSOR)LoadImage(hIntance, 
+		"Cursors\\starcraft-original\\Working In Background.ani",
+		IMAGE_CURSOR, LR_DEFAULTSIZE,LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	//wc.hCursor = LoadCursor(hIntance, MAKEINTRESOURCE(IDC_CURSOR1));
 	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
 	//Тех. Составляющия?:
 	wc.hInstance = hIntance;
 	wc.lpszClassName = NULL;
 	wc.lpszClassName = g_sz_MY_WINDOW_CLASS;
+
 	wc.lpfnWndProc = (WNDPROC)WndProc;
 
 	if (!RegisterClassEx(&wc))

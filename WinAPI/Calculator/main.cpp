@@ -1,40 +1,48 @@
-#include<Windows.h>
+﻿#include<Windows.h>
+#include"resource.h"
 
-#define IDC_BUTTON_1 1
+CONST CHAR g_sz_CLASS_NAME[] = "Calculator PV_319";
 
-CONST CHAR g_sz_MY_WINDOW_CLASS[] = "Calculator";
+CONST INT g_i_BUTTON_SIZE = 50;
+CONST INT g_i_INTERVAL = 5;
+
+CONST INT g_i_DISPLAY_WIDTH = 384;
+CONST INT g_i_DISPLAY_HEIGHT = 22;
+
+CONST INT g_i_START_X = 10;
+CONST INT g_i_START_Y = 10;
+CONST INT g_i_BUTTON_START_X = g_i_START_X;
+CONST INT g_i_BUTTON_START_Y = g_i_START_Y + g_i_DISPLAY_HEIGHT + g_i_INTERVAL;
 
 INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-
-
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
-	WNDCLASSEX wc;
-	ZeroMemory(&wc, sizeof(wc));
+	// Регистрация класса окна:
+	WNDCLASSEX wClass;
+	ZeroMemory(&wClass, sizeof(wClass));
 
-	wc.style = 0;
-	wc.cbSize = sizeof(wc);
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
+	wClass.style = 0;
+	wClass.cbSize = sizeof(wClass);
+	wClass.cbClsExtra = 0;
+	wClass.cbWndExtra = 0;
 
-	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
+	wClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wClass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON2));
+	wClass.hCursor = LoadCursor(hInstance, IDC_ARROW);
+	wClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
 
-	wc.hInstance = hInstance;
-	wc.lpszClassName = NULL;
-	wc.lpszClassName = g_sz_MY_WINDOW_CLASS;
+	wClass.hInstance = hInstance;
+	wClass.lpszClassName = g_sz_CLASS_NAME;
+	wClass.lpfnWndProc = (WNDPROC)WndProc;
+	wClass.lpszMenuName = NULL;
 
-	wc.lpfnWndProc = (WNDPROC)WndProc;
-
-	if (!RegisterClassEx(&wc))
+	if (!RegisterClassEx(&wClass))
 	{
-		MessageBox(NULL, "Class registration failed", NULL, MB_OK | MB_ICONERROR);
+		MessageBox(NULL, "Class registration failed!", NULL, MB_OK | MB_ICONERROR);
 		return 0;
 	}
-
+	//Создание окна:
 	INT screen_Width = GetSystemMetrics(SM_CXSCREEN);
 	INT screen_Height = GetSystemMetrics(SM_CYSCREEN);
 
@@ -47,79 +55,87 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	HWND hwnd = CreateWindowEx
 	(
 		NULL,
-		g_sz_MY_WINDOW_CLASS,
-		g_sz_MY_WINDOW_CLASS,
+		g_sz_CLASS_NAME,
+		g_sz_CLASS_NAME,
 		WS_OVERLAPPEDWINDOW,
-		Window_Start_X, Window_Start_Y,
+		CW_USEDEFAULT, CW_USEDEFAULT,
+		//Window_Start_X, Window_Start_Y,
 		Window_Width, Window_Height,
 		NULL,
 		NULL,
 		hInstance,
 		NULL
 	);
-	
+
 
 	ShowWindow(hwnd, nCmdShow);
 
 	UpdateWindow(hwnd);
-
+	// Запуск Цикла Сообщений:
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0) > 0)
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-	return msg.message;
+
+	return msg.wParam;
 }
+
+
 
 INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static HWND hwndButton_1;
-	static HWND TextBox;
 	switch (uMsg)
 	{
 	case WM_CREATE:
 	{
-		TextBox = CreateWindow
+		HWND hEdit = CreateWindowEx
 		(
-			"EDIT",
-			"",
-			WS_BORDER | WS_CHILD | WS_VISIBLE | ES_RIGHT,
+			NULL, "EDIT", "",
+			WS_BORDER | WS_CHILD | WS_VISIBLE,
 			10, 10,
-			250, 20,
+			250, 22,
 			hwnd,
-			NULL,
-			NULL,
+			(HMENU)IDC_EDIT_DISPLAY,
+			GetModuleHandle(NULL),
 			NULL
 		);
-		hwndButton_1 = CreateWindow
-		(
-			"BUTTON",
-			"1",
-			WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-			10, 280,
-			50, 50,
-			hwnd,
-			(HMENU)IDC_BUTTON_1,
-			(HINSTANCE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
-			NULL
-			);
-	}break;
+		CHAR sz_digit[2] = "0";
+		for (int i = 6; i >= 0; i -= 3)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				sz_digit[0] = 49 + i + j; //49 - ASCII - код единицы
+				CreateWindowEx
+				(
+					NULL, "BUTTON", sz_digit,
+					WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
+					g_i_BUTTON_START_X + j * (g_i_BUTTON_SIZE + g_i_INTERVAL),
+					g_i_BUTTON_START_Y + (g_i_BUTTON_SIZE + g_i_INTERVAL) * (2 - i / 3),
+					g_i_BUTTON_SIZE, g_i_BUTTON_SIZE,
+					hwnd,
+					(HMENU)IDC_BUTTON_1 + i + j,
+					GetModuleHandle(NULL),
+					NULL
+				);
+
+			}
+		}
+	}
+	break;
 	case WM_COMMAND:
 	{
 		switch (LOWORD(wParam))
 		{
-			case 1:
-			{
-				CONST INT SIZE = 256;
-				CHAR sz_buffer[SIZE]{};
-				GetWindowText(hwndButton_1, sz_buffer, SIZE);
-				SetWindowText(TextBox, sz_buffer);
-			}
-			break;
+		case IDC_BUTTON_0:
+		{
+
+		}
+		break;
 		}
 	}
-		break;
+	break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;

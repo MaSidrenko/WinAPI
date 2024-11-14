@@ -3,7 +3,7 @@
 #include<cstdio>
 #include"resource.h"
 
-CONST CHAR g_sz_MY_WINDOW_CLASS[] = "My Window";	//Имя класса окна
+CONST CHAR g_sz_CLASS_NAME[] = "My Window";	//Имя класса окна
 
 INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -33,7 +33,7 @@ INT WINAPI WinMain(HINSTANCE hIntance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT
 	//Тех. Составляющия?:
 	wc.hInstance = hIntance;
 	wc.lpszClassName = NULL;
-	wc.lpszClassName = g_sz_MY_WINDOW_CLASS;
+	wc.lpszClassName = g_sz_CLASS_NAME;
 
 	wc.lpfnWndProc = (WNDPROC)WndProc;
 
@@ -56,8 +56,8 @@ INT WINAPI WinMain(HINSTANCE hIntance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT
 	HWND hwnd = CreateWindowEx
 	(
 		NULL,								  //ExStyles
-		g_sz_MY_WINDOW_CLASS,				  //Class name
-		g_sz_MY_WINDOW_CLASS,				  //Window title
+		g_sz_CLASS_NAME,				  //Class name
+		g_sz_CLASS_NAME,				  //Window title
 		WS_OVERLAPPEDWINDOW,				  //Window stile
 		Window_Start_X,Window_Start_Y,		  //Window position
 		Window_Width,Window_Height,			  //Window size
@@ -109,7 +109,7 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			10, 48,
 			415, 22,
 			hwnd,
-			(HMENU)IDC_EDIT,
+			(HMENU)IDC_EDIT_DISPLAY,
 			GetModuleHandle(NULL),
 			NULL
 		);
@@ -122,7 +122,7 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			275, 85,
 			150, 32,
 			hwnd,
-			(HMENU)IDC_BUTTON,
+			(HMENU)IDC_BUTTON_0,
 			GetModuleHandle(NULL),
 			NULL
 		);
@@ -140,7 +140,7 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		CHAR sz_title[SIZE]{};
 		sprintf(sz_title, 
 			"%s - Pos: %ix%i;Size: %ix%i",
-			g_sz_MY_WINDOW_CLASS ,
+			g_sz_CLASS_NAME ,
 			rect.left, rect.top, 
 			window_width, window_height);
 		SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)sz_title);
@@ -150,15 +150,15 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		switch (LOWORD(wParam))
 		{
-		case IDC_BUTTON:
+		case IDC_BUTTON_0:
 			CONST INT SIZE = 256;
 			CHAR sz_buffer[SIZE]{};
 			HWND hStatic = GetDlgItem(hwnd, IDC_STATIC);
-			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
+			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT_DISPLAY);
 			SendMessage(hEdit, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
 			SendMessage(hStatic, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 			SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)sz_buffer);
-			SendMessage(GetDlgItem(hwnd, IDC_BUTTON), WM_SETTEXT, 0, (LPARAM)sz_buffer);
+			SendMessage(GetDlgItem(hwnd, IDC_BUTTON_0), WM_SETTEXT, 0, (LPARAM)sz_buffer);
 			break;
 		}
 	}

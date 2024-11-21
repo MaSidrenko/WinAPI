@@ -321,12 +321,15 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(hwnd, WM_COMMAND, LOWORD(IDC_BUTTON_BSP), 0);
 			break;
 		case VK_OEM_PLUS:
+		case VK_ADD:
 			SendMessage(hwnd, WM_COMMAND, LOWORD(IDC_BUTTON_PLUS), 0);
 			break;
 		case VK_OEM_MINUS:
+		case VK_SUBTRACT:
 			SendMessage(hwnd, WM_COMMAND, LOWORD(IDC_BUTTON_MINUS), 0);
 			break;
 		case VK_OEM_2:
+		case VK_DIVIDE:
 			SendMessage(hwnd, WM_COMMAND, LOWORD(IDC_BUTTON_SLASH), 0);
 			break;
 		case VK_RETURN:

@@ -23,10 +23,10 @@
 #define IDC_BUTTON_MINUS				1012
 #define IDC_BUTTON_ASTER				1013
 #define IDC_BUTTON_SLASH				1014
-#define IDC_BUTTON_EQUAL				1015
 
+#define IDC_BUTTON_CLR				1015
 #define IDC_BUTTON_BSP					1016
-#define IDC_BUTTON_CLEAR				1017
+#define IDC_BUTTON_EQUAL				1017
 
 // Next default values for new objects
 // 

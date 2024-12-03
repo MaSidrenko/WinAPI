@@ -2,7 +2,7 @@
 #include<Windows.h>
 #include"resource.h"
 #include"iostream"
-#include"map"
+//#include"map"
 
 CONST CHAR g_sz_CLASS_NAME[] = "Calculator PV_319";
 
@@ -30,12 +30,13 @@ CONST INT g_i_WINDOW_HEIGHT = g_i_DISPLAY_HEIGHT + g_i_START_Y * 2 + (g_i_BUTTON
 CONST CHAR* g_OPERATIONS[] = { "+", "-", "*", "/" };
 
 CONST COLORREF g_DISPLAY_BACKGROUND[] = { RGB(0, 0, 0), RGB(114, 114, 114) };
-CONST COLORREF g_DISPLAY_FOREGROUND[] = { RGB(0, 255, 0), RGB(255, 255, 255)};
+CONST COLORREF g_DISPLAY_FOREGROUND[] = { RGB(0, 255, 0), RGB(255, 255, 255) };
 
 CONST COLORREF g_WINDOW_BACKGROUND[] = { RGB(0, 30, 150), RGB(50, 50, 50) };
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID SetSkin(HWND hwnd, CONST CHAR* skin);
+VOID SetSkinFromDLL(HWND hwnd, CONST CHAR* skin);
 INT GetKey(HWND hwnd, WPARAM wParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
@@ -444,25 +445,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		BOOL skin_index = TrackPopupMenu(hMenu, TPM_LEFTALIGN | TPM_BOTTOMALIGN | TPM_RETURNCMD, LOWORD(lParam), HIWORD(lParam), 0, hwnd, 0);
 		switch (skin_index)
 		{
-		case IDR_SQUARE_BLUE:	SetSkin(hwnd, "square_blue"); break;
-		case IDR_METAL_MISTRAL:	SetSkin(hwnd, "metal_mistral"); break;
+		case IDR_SQUARE_BLUE:	SetSkinFromDLL(hwnd, "square_blue"); break;
+		case IDR_METAL_MISTRAL:	SetSkinFromDLL(hwnd, "metal_mistral"); break;
 		case IDR_EXIT:			DestroyWindow(hwnd);
 		}
 
 		DestroyMenu(hSubMenuSkins);
 		DestroyMenu(hMenu);
-		
-		if(skin_index >= IDR_SQUARE_BLUE && skin_index <= IDR_METAL_MISTRAL)
-		{
-		color_index = skin_index - IDR_CONTEX_MENU - 1; 
-		HWND hEditDisplay = GetDlgItem(hwnd, IDC_EDIT_DISPLAY);
-		HDC hdcDisplay = GetDC(hEditDisplay);
-		SendMessage(hwnd, WM_CTLCOLOREDIT, WPARAM(hdcDisplay), LPARAM(hEditDisplay));
 
-		ReleaseDC(hEditDisplay, hdcDisplay);
-		CHAR sz_buffer[MAX_PATH]{};
-		SendMessage(hEditDisplay, WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
-		SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_buffer);
+		if (skin_index >= IDR_SQUARE_BLUE && skin_index <= IDR_METAL_MISTRAL)
+		{
+			color_index = skin_index - IDR_CONTEX_MENU - 1;
+			HWND hEditDisplay = GetDlgItem(hwnd, IDC_EDIT_DISPLAY);
+			HDC hdcDisplay = GetDC(hEditDisplay);
+			SendMessage(hwnd, WM_CTLCOLOREDIT, WPARAM(hdcDisplay), LPARAM(hEditDisplay));
+
+			ReleaseDC(hEditDisplay, hdcDisplay);
+			CHAR sz_buffer[MAX_PATH]{};
+			SendMessage(hEditDisplay, WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
+			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
 	}break;
 	case WM_DESTROY:
@@ -571,4 +572,25 @@ INT GetKey(HWND hwnd, WPARAM wParam)
 		return LOWORD(IDC_BUTTON_ASTER);
 		break;
 	}
+}
+
+VOID SetSkinFromDLL(HWND hwnd, CONST CHAR* skin)
+{
+	CHAR file_name[MAX_PATH]{};
+	sprintf(file_name, "ButtonsBMP\\%s", skin);
+	HMODULE hInst = LoadLibrary(file_name);
+	for (int i = IDC_BUTTON_0; i <= IDC_BUTTON_EQUAL; i++)
+	{
+		HBITMAP buttonBMP = (HBITMAP)LoadImage
+		(
+			hInst,
+			MAKEINTRESOURCE(i),
+			IMAGE_BITMAP,
+			i > IDC_BUTTON_0		? g_i_BUTTON_SIZE : g_i_BUTTON_DOUBLE_SIZE,
+			i < IDC_BUTTON_EQUAL	? g_i_BUTTON_SIZE : g_i_BUTTON_DOUBLE_SIZE,
+			NULL
+		);
+		SendMessage(GetDlgItem(hwnd, i), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)buttonBMP);
+	}
+	FreeLibrary(hInst);
 }

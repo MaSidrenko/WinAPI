@@ -50,8 +50,31 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wClass.cbClsExtra = 0;
 	wClass.cbWndExtra = 0;
 
-	wClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
-	wClass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON2));
+	HMODULE hInstICO = LoadLibrary("ICO\\CalcICO.dll");
+
+	wClass.hIcon = (HICON)LoadImage
+	(
+		hInstICO,
+		MAKEINTRESOURCE(IDI_ICON1),
+		IMAGE_ICON,
+		ICON_BIG,
+		ICON_BIG,
+		NULL
+	);
+
+	HMODULE hInstICO_SM = LoadLibrary("ICO\\CalcICO_SM.dll");
+
+	wClass.hIconSm = (HICON)LoadImage
+	(
+		hInstICO_SM,
+		MAKEINTRESOURCE(IDI_ICON2),
+		IMAGE_ICON,
+		ICON_SMALL,
+		ICON_SMALL,
+		NULL
+	);
+	//wClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	//wClass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON2));
 	wClass.hCursor = LoadCursor(hInstance, IDC_ARROW);
 	//wClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
 	HBITMAP hBackGround = (HBITMAP)LoadImage(hInstance, "Picture\\CalcBMP.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
@@ -110,6 +133,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	//--------------------------------//
 
 	static INT color_index = 0;
+	static HANDLE hMyFonts = NULL;
+
 
 	//--------------------------------//
 	switch (uMsg)
@@ -129,8 +154,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
-
-		AddFontResourceEx("Fonts\\digital-7.ttf", FR_PRIVATE, 0);
+		HINSTANCE hInstFont = LoadLibrary("Fonts\\digital-7.dll");
+		//.. - Выход в родительский каталог
+		HRSRC hFontRes = FindResource(hInstFont, MAKEINTRESOURCE(99), "BINARY");
+		HGLOBAL hFntMem = LoadResource(hInstFont, hFontRes);
+		VOID* fntData = LockResource(hFntMem);
+		DWORD nFont = 0;
+		DWORD len = SizeofResource(hInstFont, hFontRes);
+		hMyFonts = AddFontMemResourceEx(fntData, len, nullptr, &nFont);
+		//AddFontResourceEx("Fonts\\digital-7.ttf", FR_PRIVATE, 0);
 		HFONT hFont = CreateFont
 		(
 			g_i_FONT_HEIGHT, g_i_FONT_WIDTH,
@@ -145,10 +177,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CLIP_TT_ALWAYS,
 			ANTIALIASED_QUALITY,
 			FF_DONTCARE,
-			"digital-7"
+			"Digital-7"
 		);
+		
 		SendMessage(hEdit, WM_SETFONT, (WPARAM)hFont, TRUE);
-
+		FreeLibrary(hInstFont);
 		//DONE:	Button Icons.
 		CHAR sz_digit[2] = "0";
 		CONST INT SIZE = 256;
@@ -468,6 +501,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}break;
 	case WM_DESTROY:
 	{
+		RemoveFontMemResourceEx(hMyFonts);
 		HWND hEdit = GetDlgItem(hwnd, IDC_EDIT_DISPLAY);
 		HDC hdc = GetDC(hEdit);
 		ReleaseDC(hEdit, hdc);
@@ -586,8 +620,8 @@ VOID SetSkinFromDLL(HWND hwnd, CONST CHAR* skin)
 			hInst,
 			MAKEINTRESOURCE(i),
 			IMAGE_BITMAP,
-			i > IDC_BUTTON_0		? g_i_BUTTON_SIZE : g_i_BUTTON_DOUBLE_SIZE,
-			i < IDC_BUTTON_EQUAL	? g_i_BUTTON_SIZE : g_i_BUTTON_DOUBLE_SIZE,
+			i > IDC_BUTTON_0 ? g_i_BUTTON_SIZE : g_i_BUTTON_DOUBLE_SIZE,
+			i < IDC_BUTTON_EQUAL ? g_i_BUTTON_SIZE : g_i_BUTTON_DOUBLE_SIZE,
 			NULL
 		);
 		SendMessage(GetDlgItem(hwnd, i), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)buttonBMP);

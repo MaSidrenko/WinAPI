@@ -19,6 +19,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ResourceOnlyDLL", "Resource
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Font_onlyDLL", "Font_onlyDLL\Font_onlyDLL.vcxproj", "{9BF0D38B-8092-4BA4-A8BA-815DF2508ABC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ICO_OnlyDLL", "ICO_OnlyDLL\ICO_OnlyDLL.vcxproj", "{ACA38A71-F582-4776-AFCF-FCBA64EB6D59}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupCalc", "SetupCalc\SetupCalc.vdproj", "{DFAA0D26-5972-4D1E-AD6D-CB6D2545F5FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +95,19 @@ Global
 		{9BF0D38B-8092-4BA4-A8BA-815DF2508ABC}.Release|x64.Build.0 = Release|x64
 		{9BF0D38B-8092-4BA4-A8BA-815DF2508ABC}.Release|x86.ActiveCfg = Release|Win32
 		{9BF0D38B-8092-4BA4-A8BA-815DF2508ABC}.Release|x86.Build.0 = Release|Win32
+		{ACA38A71-F582-4776-AFCF-FCBA64EB6D59}.Debug|x64.ActiveCfg = Debug|x64
+		{ACA38A71-F582-4776-AFCF-FCBA64EB6D59}.Debug|x64.Build.0 = Debug|x64
+		{ACA38A71-F582-4776-AFCF-FCBA64EB6D59}.Debug|x86.ActiveCfg = Debug|Win32
+		{ACA38A71-F582-4776-AFCF-FCBA64EB6D59}.Debug|x86.Build.0 = Debug|Win32
+		{ACA38A71-F582-4776-AFCF-FCBA64EB6D59}.Release|x64.ActiveCfg = Release|x64
+		{ACA38A71-F582-4776-AFCF-FCBA64EB6D59}.Release|x64.Build.0 = Release|x64
+		{ACA38A71-F582-4776-AFCF-FCBA64EB6D59}.Release|x86.ActiveCfg = Release|Win32
+		{ACA38A71-F582-4776-AFCF-FCBA64EB6D59}.Release|x86.Build.0 = Release|Win32
+		{DFAA0D26-5972-4D1E-AD6D-CB6D2545F5FC}.Debug|x64.ActiveCfg = Debug
+		{DFAA0D26-5972-4D1E-AD6D-CB6D2545F5FC}.Debug|x86.ActiveCfg = Debug
+		{DFAA0D26-5972-4D1E-AD6D-CB6D2545F5FC}.Release|x64.ActiveCfg = Release
+		{DFAA0D26-5972-4D1E-AD6D-CB6D2545F5FC}.Release|x86.ActiveCfg = Release
+		{DFAA0D26-5972-4D1E-AD6D-CB6D2545F5FC}.Release|x86.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

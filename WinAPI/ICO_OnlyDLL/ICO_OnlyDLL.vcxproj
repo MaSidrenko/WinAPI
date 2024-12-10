@@ -18,38 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="buttonsbmp\square_blue\bitmap1.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_0.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_1.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_2.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_3.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_4.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_5.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_6.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_7.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_8.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_9.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_aster.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_bsp.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_clr.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_equal.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_minus.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_plus.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_point.bmp" />
-    <Image Include="ButtonsBMP\square_blue\button_slash.bmp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{996e1078-d88b-4c14-9723-7047e93d963d}</ProjectGuid>
-    <RootNamespace>ResourceOnlyDLL</RootNamespace>
+    <ProjectGuid>{aca38a71-f582-4776-afcf-fcba64eb6d59}</ProjectGuid>
+    <RootNamespace>ICOOnlyDLL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -101,7 +74,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;RESOURCEONLYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;ICOONLYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -109,7 +82,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <NoEntryPoint>true</NoEntryPoint>
-      <OutputFile>$(OutDir)\ButtonsBMP\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)\ICO\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -118,7 +91,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;RESOURCEONLYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;ICOONLYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -128,14 +101,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <NoEntryPoint>true</NoEntryPoint>
-      <OutputFile>$(OutDir)\ButtonsBMP\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)\ICO\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;RESOURCEONLYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;ICOONLYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -143,7 +116,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <NoEntryPoint>true</NoEntryPoint>
-      <OutputFile>$(OutDir)\ButtonsBMP\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)\ICO\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,7 +125,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;RESOURCEONLYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;ICOONLYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -162,9 +135,18 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <NoEntryPoint>true</NoEntryPoint>
-      <OutputFile>$(OutDir)\ButtonsBMP\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)\ICO\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ICO\ico_calc.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

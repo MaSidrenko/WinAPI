@@ -1,8 +1,11 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include<Windows.h>
 #include"resource.h"
+#include<Shlwapi.h>
 #include"iostream"
-//#include"map"
+
+#pragma comment (lib, "Shlwapi.lib")
+
 
 CONST CHAR g_sz_CLASS_NAME[] = "Calculator PV_319";
 
@@ -38,6 +41,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID SetSkin(HWND hwnd, CONST CHAR* skin);
 VOID SetSkinFromDLL(HWND hwnd, CONST CHAR* skin);
 INT GetKey(HWND hwnd, WPARAM wParam);
+VOID GetExeDirectory(CHAR* buffer, DWORD size);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -50,27 +54,34 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wClass.cbClsExtra = 0;
 	wClass.cbWndExtra = 0;
 
-	HMODULE hInstICO = LoadLibrary("ICO\\CalcICO.dll");
+	CHAR ico_path[MAX_PATH]{};
+	GetExeDirectory(ico_path, MAX_PATH);
+	CHAR ico_dll_path[MAX_PATH]{};
+	PathCombine(ico_dll_path, ico_path, "ICO\\CalcICO.dll");
+
+	HMODULE hInstICO = LoadLibrary(ico_dll_path);
 
 	wClass.hIcon = (HICON)LoadImage
 	(
 		hInstICO,
 		MAKEINTRESOURCE(IDI_ICON1),
 		IMAGE_ICON,
-		ICON_BIG,
-		ICON_BIG,
+		LR_DEFAULTSIZE,
+		LR_DEFAULTSIZE,
 		NULL
 	);
-
-	HMODULE hInstICO_SM = LoadLibrary("ICO\\CalcICO_SM.dll");
+	/*CHAR icoSM_path[MAX_PATH];
+	GetExeDirectory(icoSM_path, MAX_PATH);
+	PathCombine(ico_dll_path, ico_path, "ICO\\CalcICO_SM.dll");
+	HMODULE hInstICO_SM = LoadLibrary(icoSM_path);*/
 
 	wClass.hIconSm = (HICON)LoadImage
 	(
-		hInstICO_SM,
+		hInstICO,
 		MAKEINTRESOURCE(IDI_ICON2),
 		IMAGE_ICON,
-		ICON_SMALL,
-		ICON_SMALL,
+		LR_DEFAULTSIZE,
+		LR_DEFAULTSIZE,
 		NULL
 	);
 	//wClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
@@ -117,7 +128,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-
+	FreeLibrary(hInstICO);
 	return msg.wParam;
 }
 
@@ -152,13 +163,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
-		HINSTANCE hInstFont = LoadLibrary("Fonts\\digital-7.dll"); //.. - Выход в родительский каталог
+		CHAR file_path[MAX_PATH]{};
+		GetExeDirectory(file_path, MAX_PATH);
+		CHAR dll_path[MAX_PATH]{};
+		PathCombine(dll_path, file_path, ("Font\\digital-7.dll"));
+		HINSTANCE hInstFont = LoadLibrary(dll_path); //.. - Выход в родительский каталог
 		HRSRC hFontRes = FindResource(hInstFont, MAKEINTRESOURCE(99), "BINARY");
 		HGLOBAL hFntMem = LoadResource(hInstFont, hFontRes);
 		VOID* fntData = LockResource(hFntMem);
 		DWORD nFont = 0;
 		DWORD len = SizeofResource(hInstFont, hFontRes);
-		hMyFonts = AddFontMemResourceEx(fntData, len, nullptr, &nFont); //AddFontResourceEx("Fonts\\digital-7.ttf", FR_PRIVATE, 0);
+		hMyFonts = AddFontMemResourceEx(fntData, len, nullptr, &nFont);
 		HFONT hFont = CreateFont
 		(
 			g_i_FONT_HEIGHT, g_i_FONT_WIDTH,
@@ -275,7 +290,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
-		SetSkin(hwnd, "square_blue");
+		SetSkinFromDLL(hwnd, "square_blue");
 	}break;
 	case WM_CTLCOLOREDIT:
 	{
@@ -524,8 +539,10 @@ INT GetKey(HWND hwnd, WPARAM wParam)
 
 VOID SetSkinFromDLL(HWND hwnd, CONST CHAR* skin)
 {
+	CHAR file_path[MAX_PATH]{};
 	CHAR file_name[MAX_PATH]{};
-	sprintf(file_name, "ButtonsBMP\\%s", skin);
+	GetExeDirectory(file_path, MAX_PATH);
+	sprintf(file_name, "%s\\ButtonsBMP\\%s", file_path ,skin);
 	HMODULE hInst = LoadLibrary(file_name);
 	for (int i = IDC_BUTTON_0; i <= IDC_BUTTON_EQUAL; i++)
 	{
@@ -541,4 +558,10 @@ VOID SetSkinFromDLL(HWND hwnd, CONST CHAR* skin)
 		SendMessage(GetDlgItem(hwnd, i), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)buttonBMP);
 	}
 	FreeLibrary(hInst);
+}
+
+VOID GetExeDirectory(CHAR* buffer, DWORD size)
+{
+	GetModuleFileName(NULL, buffer, size);
+	PathRemoveFileSpec(buffer);
 }
